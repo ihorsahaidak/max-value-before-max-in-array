@@ -1,61 +1,64 @@
+var Filer;
+var reader = new FileReader();
 
-//https://docs.google.com/document/d/10HWgzs69LvqzIb4kHcEWC6-nfI45kKGO6Gv0-dGVaKw/edit
-function beforeMax(arr) 
-{
-	var first, 
-		second, 
-		k=0;
-		first = second = -Infinity;
-console.log(arr);
-	for (var i = 0; i < arr.length; i++)
-	{
-		if (arr[i] > second)
-		{
-			first = second;
-			second = arr[i];
-		}
-		else if (arr[i] > first && arr[i] != second)
-		{
-			first = arr[i];
-		}
-		if(arr[0] == arr[i])
-		{
-			k++;
-		}
-		if(k == arr.length)
-		{
-			first = null;
-			return first;
-		}
-
-	}
-
-return first;
+function rdfile(files) {
+    tfile = files[0];
+    reader.readAsText(tfile);
+    reader.onload = function(e) {
+        Filer = e.target.result;
+    };
 }
 
-var arr = new Array(5, 5, 5, 5, 5);
-console.log("array["+arr+"] = "+beforeMax(arr));
+function showFiler() {
+    document.getElementById("showData").innerHTML = Filer;
+}
 
-var arr1 = new Array(); arr1[0]=5;
-console.log("array["+arr1+"] = "+beforeMax(arr1));
+function condit() {
+    alert("11. Метасимвол – +. Зміст метасимволу + – одна довільна голосна латинська літера повинна бути присутньою в слові в потрібній позиції. Сформувати новий текст, в який помістити знайдені слова, змінивши в них регістр букв, що визначаються метасимволом, на протилежний.");
+}
 
-var arr2 = new Array(-1, -2, -3, -4, -5, -5);
-console.log("array["+arr2+"] = "+beforeMax(arr2));
+function rFunc() {
+    if (Filer != undefined)
+        var str = Filer;
+    else str = document.getElementById("str").value;
+    var templ = document.getElementById("temp").value;
+    // var str = "this suoject has a submarined as a suUject subsequence suaject the"; 
+    // var template = "su+ject";
+    var arrTempl = templ.split("");
+    var arrStr = str.split(" ");
+    var arr = "aouiyeAOUIYE".split("");
+    var templWord;
+    var arrResult = new Array();
+    var res = new Array();
+    for (var i = 0; i < arrTempl.length; i++) {
+        if (arrTempl[i] === "+") {
+            for (var j = 0; j < arr.length; j++) {
+                arrTempl[i] = arr[j];
 
-var arr3 = new Array(1, 1, 1, 1, 5, 5);
-console.log("array["+arr3+"] = "+beforeMax(arr3));
+                templWord = str.search(arrTempl.join(""));
 
-var arr4 = new Array(5, 5, 1, 1, 1, 1);
-console.log("array["+arr4+"] = "+beforeMax(arr4));
-
-var arr5 = new Array(1, 2, 3);
-console.log("array["+arr5+"] = "+beforeMax(arr5));
-
-var arr6 = new Array(3, 2, 1);
-console.log("array["+arr6+"] = "+beforeMax(arr6));
-
-var arr7 = new Array(3, 1);
-console.log("array["+arr7+"] = "+beforeMax(arr7));
-
-var arr8 = new Array(1, 3);
-console.log("array["+arr8+"] = "+beforeMax(arr8));
+                if (templWord != -1) {
+                    arrResult[j] = arrTempl.join("");
+                }
+            }
+        }
+    }
+    for (var i = 0; i < arrStr.length; i++) {
+        for (var j = 0; j < arrResult.length; j++) {
+            if (arrResult[j] == arrStr[i]) res[i] = arrResult[j];
+        }
+    }
+    for (var i = 0; i < arrStr.length; i++) {
+        for (var j = 0; j < arrResult.length; j++) {
+            if (res[i] == arrStr[i]) arrStr[i] = arrStr[i].fontcolor("blue");
+        }
+    }
+    document.getElementById("demo").innerHTML = "<br>" + "Введений рядок : " + str.fontcolor("#000") + "<br>";
+    document.getElementById("demoF").innerHTML = "Шаблон (маска) : " + document.getElementById("temp").value.fontcolor("red") + "<br>";
+    document.getElementById("beforeS").innerHTML = "Слова що підходять : ";
+    document.getElementById("demoS").innerHTML = res.join(" ") + " " + "<br>";
+    document.getElementById("demoT").innerHTML = "Вихідний рядок : " + arrStr.join(" ");
+    var text = res.join(" ");
+    document.getElementById("outTfile").innerHTML = "Відкрити: " +
+        '<a href="data:text/plain;charset=utf-8,%EF%BB%BF' + encodeURIComponent(text) + '" download="output.txt">output.txt</a>';
+}
